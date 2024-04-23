@@ -21,7 +21,7 @@
                     </div>
                     <div class="form-group">
                         <label for="captcha">圖形驗證碼:</label>
-                        <div class="btn btn-primary btn-lg m-2" id="captcha">{{ captchaSrc }}</div>
+                        <div class="btn btn-primary m-2" id="captcha">{{ captchaSrc }}</div>
                         <button class="btn btn-sm btn-secondary" type="button" @click="refreshCaptcha">重新生成</button>
                         <input type="text" class="form-control" id="captcha" v-model="captcha" required>
                     </div>
@@ -36,7 +36,7 @@
                 username : '',
                 password : '',
                 captcha : '',
-                captchaSrc : './api/captcha.php',
+                captchaSrc : '<?= $_SESSION['code'] = rand(1000, 9999); ?>',
             };
         },
         methods:{
@@ -49,18 +49,20 @@
                     body: JSON.stringify({
                         username: this.username,
                         password: this.password,
-                        captcha: this.captcha,
+                        captcha: this.captchaSrc,
                     }),
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if(data.success){
-                        alert('登入成功');
-                        location.href = './';
-                    }else{
-                        alert('登入失敗');
-                        this.refreshCaptcha();
-                    }
+                if(data.status === 'success'){  
+                    alert('登入成功');
+                    console.log(data);
+                    location.href = './';
+                }else{
+                    alert('登入失败');
+                    console.log(data);
+                    this.refreshCaptcha();
+                }
                 })
             },
             refreshCaptcha(){

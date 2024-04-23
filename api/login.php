@@ -5,9 +5,11 @@ header('Content-Type: application/json'); // 設定輸出為 JSON 格式
 
 $response = [];
 
-$username = $_POST['username'] ?? '';  // 取得 POST 表單資料
-$password = $_POST['password'] ?? '';
-$captcha = $_POST['captcha'] ?? '';
+$data = json_decode(file_get_contents("php://input"), true);  // 取得請求資料
+$username = $data['username'] ?? '';
+$password = $data['password'] ?? '';
+$captcha = $data['captcha'] ?? '';
+
 
 if (strtolower($captcha) === strtolower($_SESSION['captcha'] ?? '')) {  // 驗證圖形驗證碼
         $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :username AND password = :password");  // 準備 SQL 語句
