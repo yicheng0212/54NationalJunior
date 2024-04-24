@@ -20,10 +20,10 @@
                         <input type="password" class="form-control" id="password" v-model="password" required>
                     </div>
                     <div class="form-group">
-                        <label for="captcha">圖形驗證碼:</label>
-                        <div class="btn btn-primary m-2" id="captcha">{{ captchaSrc }}</div>
-                        <button class="btn btn-sm btn-secondary" type="button" @click="refreshCaptcha">重新生成</button>
-                        <input type="text" class="form-control" id="captcha" v-model="captcha" required>
+                        <label for="captcha">驗證碼:</label>
+                        <div class="btn btn-primary m-2" id="captcha">{{ captcha }}</div>
+                        <button class="btn btn-sm btn-secondary" type="button" @click="reGenerate">重新生成</button>
+                        <input type="text" class="form-control" id="verification" v-model="verification" required>
                     </div>
                     <button type="submit" class="btn btn-success btn-lg btn-block">送出</button>
                 </form>
@@ -33,46 +33,34 @@
   Vue.createApp({
         data(){
             return {
-                username : '',
-                password : '',
-                captcha : '',
-                captchaSrc : '<?= $_SESSION['code'] = rand(1000, 9999); ?>',
+                username: "",
+                password: "",
+                captcha: "",
+                verification: ""
             };
         },
         methods:{
             submitForm(){
-                fetch('./api/login.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: this.username,
-                        password: this.password,
-                        captcha: this.captchaSrc,
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                if(data.status === 'success'){  
-                    alert('登入成功');
-                    console.log(data);
-                    location.href = './';
-                }else{
-                    alert('登入失败');
-                    console.log(data);
-                    this.refreshCaptcha();
-                }
-                })
-            },
-            refreshCaptcha(){
-                fetch('./api/captcha.php')
-                    .then(response => response.text())
-                    .then(data => {
-                        this.captchaSrc = data;
+                if (this.verification == this.captcha) {
+                    $.get("./api/login.php", { username: this.username, password: this.password }, (r) => {
+                        if (r == 0) {
+                            alert("登入成功")
+                            location.href = "admin.php"
+                        } else {
+                            alert("登入失敗")
+                        }
                     })
+                } else {
+                    alert("驗證碼錯誤，哈哈笑死")
+                }
             },
+            reGenerate() {
+                this.captcha = Math.floor(Math.random() * 8999 + 1000)
+            }
         },
+        mounted() {
+            this.captcha = Math.floor(Math.random() * 8999 + 1000)
+        }
     }).mount('#app');
     </script>
 </body>
