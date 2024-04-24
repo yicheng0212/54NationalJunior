@@ -13,17 +13,17 @@
                     <h2 class="text-center">網站管理--登入</h2>
                     <div class="form-group">
                         <label for="username">帳號:</label>
-                        <input type="text" class="form-control" id="username" v-model="username" required>
+                        <input type="text" class="form-control" id="username" v-model="this.username" required>
                     </div>
                     <div class="form-group">
                         <label for="password">密碼:</label>
-                        <input type="password" class="form-control" id="password" v-model="password" required>
+                        <input type="password" class="form-control" id="password" v-model="this.password" required>
                     </div>
                     <div class="form-group">
                         <label for="captcha">驗證碼:</label>
                         <div class="btn btn-primary m-2" id="captcha">{{ captcha }}</div>
                         <button class="btn btn-sm btn-secondary" type="button" @click="reGenerate">重新生成</button>
-                        <input type="text" class="form-control" id="verification" v-model="verification" required>
+                        <input type="text" class="form-control" id="verification" v-model="this.verification" required>
                     </div>
                     <button type="submit" class="btn btn-success btn-lg btn-block">送出</button>
                 </form>
@@ -42,13 +42,14 @@
         methods:{
             submitForm(){
                 if (this.verification == this.captcha) {
-                    $.get("./api/login.php", { username: this.username, password: this.password }, (r) => {
-                        if (r == 0) {
-                            alert("登入成功")
-                            location.href = "admin.php"
-                        } else {
-                            alert("登入失敗")
-                        }
+                    $.get("./api/loginDb.php", { username: this.username, password: this.password }, (r) => {
+                        // if (r == 0) {
+                        //     alert("登入失敗")
+                        // } else {
+                        //     alert("登入成功")
+                        //     location.href = "admin.php"
+                        // }
+                        console.log(r, this.username, this.password)
                     })
                 } else {
                     alert("驗證碼錯誤，哈哈笑死")

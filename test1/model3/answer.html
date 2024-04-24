@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>q3</title>
+  <script src="./js/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-model="newTask">
+    <button @click="addTask">新增任務</button>
+    <ul>
+      <li v-for="task in tasks" :key="task.id">
+        {{ task.text }}
+        <button @click="deleteTask(task.id)">刪除</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    const { createApp, reactive, ref } = Vue;
+
+    const App = {
+        setup() {
+            const newTask = ref('');
+            const tasks = reactive([]);
+            let nextTaskId = 1;
+
+            const addTask = () => {
+                if (newTask.value.trim() !== '') {
+                    tasks.push({ id: nextTaskId++, text: newTask.value });
+                    newTask.value = '';
+                }
+            };
+
+            const deleteTask = (id) => {
+                const index = tasks.findIndex(task => task.id === id);
+                if (index !== -1) {
+                    tasks.splice(index, 1);
+                }
+            };
+
+            return { newTask, tasks, addTask, deleteTask };
+        }
+    };
+
+    createApp(App).mount('#app');
+</script>
+</body>
+</html>
