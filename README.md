@@ -5,7 +5,7 @@
 [競賽解題](https://github.com/yicheng0212/54NationalJunior)
 ---
 
-**卍O航航與廢物Vue小教室oO卐**
+**卍O航航與~~廢物的~~Vue小教室oO卐**
 ===
 引入CDN
 ---
