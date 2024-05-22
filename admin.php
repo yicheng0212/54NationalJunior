@@ -1,9 +1,9 @@
 <?php
-// session_start();
-// if (!isset($_SESSION['username'])){
-//     header('Location:login.php');
-//     exit();
-// }
+session_start();//啟用session
+if (!isset($_SESSION['username'])){//如果沒有設定session['username']
+    header('Location:login.php');//導向登入頁面
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

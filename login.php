@@ -42,7 +42,7 @@
         methods:{
             submitForm(){
                 if (this.verification == this.captcha) {
-                    $.get("./api/loginDb.php", { username: this.username, password: this.password }, (r) => {
+                    $.get("./api/login.php", { username: this.username, password: this.password }, (r) => {
                         if (r == 0) {
                             alert("登入失敗")
                         } else {
