@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'db.php';
 $username = $_GET['username'] ?? '';
 $password = $_GET['password'] ?? '';

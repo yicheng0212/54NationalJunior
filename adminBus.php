@@ -35,7 +35,7 @@
         </div>
 
         <!-- 接駁車列表表格 -->
-        <table class="table table-bordered">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>接駁車編號</th>
@@ -48,8 +48,8 @@
                     <td>{{ bus.busNumber }}</td>
                     <td>{{ bus.drivenTime }}</td>
                     <td>
-                        <button class="btn btn-warning btn-sm" @click="editBus(bus)">編輯</button>
-                        <button class="btn btn-danger btn-sm" @click="deleteBus(bus.id)">刪除</button>
+                        <button class="btn btn-warning btn-sm m-1" @click="editBus(bus)">編輯</button>
+                        <button class="btn btn-danger btn-sm m-1" @click="deleteBus(bus.id)">刪除</button>
                     </td>
                 </tr>
             </tbody>
