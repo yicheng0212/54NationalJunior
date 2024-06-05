@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- 主機： localhost
--- 產生時間： 2024 年 05 月 19 日 14:38
--- 伺服器版本： 10.4.28-MariaDB
--- PHP 版本： 8.2.4
+-- 主機： 127.0.0.1
+-- 產生時間： 2024-06-05 14:56:57
+-- 伺服器版本： 10.4.32-MariaDB
+-- PHP 版本： 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫： `54RegionalJunior`
+-- 資料庫： `54nationaljunior`
 --
 
 -- --------------------------------------------------------
@@ -38,7 +38,29 @@ CREATE TABLE `bus` (
 --
 
 INSERT INTO `bus` (`id`, `busNumber`, `drivenTime`) VALUES
-(1, '1', 1);
+(1, '1', 12),
+(2, '2', 5);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `station`
+--
+
+CREATE TABLE `station` (
+  `id` int(11) NOT NULL,
+  `stationName` varchar(255) NOT NULL,
+  `drivenTime` int(11) NOT NULL,
+  `stopTime` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_nopad_ci;
+
+--
+-- 傾印資料表的資料 `station`
+--
+
+INSERT INTO `station` (`id`, `stationName`, `drivenTime`, `stopTime`) VALUES
+(1, '1', 0, 5),
+(2, '2', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -70,6 +92,12 @@ ALTER TABLE `bus`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 資料表索引 `station`
+--
+ALTER TABLE `station`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 資料表索引 `users`
 --
 ALTER TABLE `users`
@@ -83,7 +111,13 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `bus`
 --
 ALTER TABLE `bus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `station`
+--
+ALTER TABLE `station`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `users`

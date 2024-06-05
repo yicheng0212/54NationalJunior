@@ -146,7 +146,7 @@
                     <div class="data text-center">
                         <p style="transform: translateY(-4em);" :class="item.bus[0].textColor" v-html="item.bus[0].htmlContent"></p>
                         <button class="btn btn-sm btn-outline-dark" style="transform: translateY(-2em);">{{
-                                    item.name }}</button>
+                                    item.stationName }}</button>
                         <div class="card shadow busData p-1">
                             <p v-for="bus in item.bus" class="m-0" :class="bus.textColor" v-html="bus.htmlContentForCard">
                             </p>
@@ -168,25 +168,25 @@
         createApp({
             setup() {
 
-                const data = reactive({// 這裡的 data 是用來存放地圖上的站點資訊
+                const data = reactive({ // 這裡的 data 是用來存放地圖上的站點資訊
                     row: 3,
                     data: []
                 })
 
-                let station, busData = undefined// 這裡的 station 是用來存放站點資訊，busData 是用來存放接駁車資訊
+                let station, busData = undefined // 這裡的 station 是用來存放站點資訊，busData 是用來存放接駁車資訊
 
-                const procData = () => {// 這裡的 procData 是用來處理資料的函式
-                    if (!station || typeof bus === "undefined") return;// 如果 station 或 busData 還沒有資料，就不處理資料
+                const procData = () => { // 這裡的 procData 是用來處理資料的函式
+                    if (!station || typeof bus === "undefined") return; // 如果 station 或 busData 還沒有資料，就不處理資料
 
-                    let allTime = 0;// 這裡的 allTime 是用來計算總時間的變數
-                    console.log("Starting procData");// 這裡的 console.log 用來顯示訊息
+                    let allTime = 0; // 這裡的 allTime 是用來計算總時間的變數
+                    console.log("Starting procData"); // 這裡的 console.log 用來顯示訊息
 
-                    station.forEach((stationInfo, idx) => {// 這裡的 forEach 用來遍歷 station 陣列
+                    station.forEach((stationInfo, idx) => { // 這裡的 forEach 用來遍歷 station 陣列
                         allTime += stationInfo.drivenTime + stationInfo.stopTime; // 使用 drivenTime 和 stopTime
-                        stationInfo.bus = [];// 這裡的 bus 是用來存放接駁車資訊
+                        stationInfo.bus = []; // 這裡的 bus 是用來存放接駁車資訊
 
-                        bus.forEach((busInfo) => {// 這裡的 forEach 用來遍歷 bus 陣列
-                            let busCopy = {// 這裡的 busCopy 是用來複製 busInfo 物件
+                        bus.forEach((busInfo) => { // 這裡的 forEach 用來遍歷 bus 陣列
+                            let busCopy = { // 這裡的 busCopy 是用來複製 busInfo 物件
                                 ...busInfo
                             };
                             if (busCopy.drivenTime <= allTime) { // 使用 drivenTime
@@ -206,24 +206,24 @@
                                 busCopy.htmlContent = idx == 0 ? "未發車" : busCopy.busNumber + "已過站";
                                 busCopy.htmlContentForCard = idx == 0 ? "未發車" : busCopy.busNumber + "已過站";
                             }
-                            stationInfo.bus.push(busCopy);// 這裡的 push 用來將 busCopy 加入 stationInfo.bus
+                            stationInfo.bus.push(busCopy); // 這裡的 push 用來將 busCopy 加入 stationInfo.bus
                         });
 
-                        stationInfo.bus.sort((a, b) => a.relArri - b.relArri);// 這裡的 sort 用來排序 stationInfo.bus
-                        stationInfo.bus.splice(3);// 這裡的 splice 用來刪除 stationInfo.bus 的元素
+                        stationInfo.bus.sort((a, b) => a.relArri - b.relArri); // 這裡的 sort 用來排序 stationInfo.bus
+                        stationInfo.bus.splice(3); // 這裡的 splice 用來刪除 stationInfo.bus 的元素
                     });
 
-                    data.data = [];// 這裡的 data.data 是用來存放地圖上的站點資訊
-                    let rowCount = Math.ceil(station.length / data.row);// 這裡的 rowCount 是用來計算列數
-                    for (let i = 0; i < rowCount; i++) {// 這裡的 for 迴圈用來遍歷 rowCount
+                    data.data = []; // 這裡的 data.data 是用來存放地圖上的站點資訊
+                    let rowCount = Math.ceil(station.length / data.row); // 這裡的 rowCount 是用來計算列數
+                    for (let i = 0; i < rowCount; i++) { // 這裡的 for 迴圈用來遍歷 rowCount
                         data.data.push(station.slice(i * data.row, (i + 1) * data.row));
                     }
 
-                    console.log("Processed Data:", data.data);// 這裡的 console.log 用來顯示訊息
+                    console.log("Processed Data:", data.data); // 這裡的 console.log 用來顯示訊息
                 };
 
 
-                const getData = async () => {// 這裡的 getData 是用來取得資料的函式
+                const getData = async () => { // 這裡的 getData 是用來取得資料的函式
                     await $.getJSON("./api/station.php", {}, (r) => {
                         console.log("Station Data:", r);
                         station = structuredClone(r);
@@ -237,14 +237,14 @@
                 };
 
 
-                onMounted(() => {// 這裡的 onMounted 用來執行函式
+                onMounted(() => { // 這裡的 onMounted 用來執行函式
                     getData()
                     setInterval(() => {
                         procData()
                     }, 1)
                 })
 
-                return {// 這裡的 return 用來回傳資料
+                return { // 這裡的 return 用來回傳資料
                     data,
                     getData,
                     procData
