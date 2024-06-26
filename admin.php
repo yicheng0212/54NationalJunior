@@ -20,6 +20,7 @@ if (!isset($_SESSION['username'])){//如果沒有設定session['username']
         <div class="border p-3">
             <a class="btn <?php echo $pos == 'bus' ? 'btn-primary' : 'btn-light'; ?>" href="?pos=bus">接駁車管理</a><!--這裡的 ?pos=bus 是用來切換顯示接駁車管理的畫面-->
             <a class="btn <?php echo $pos == 'station' ? 'btn-primary' : 'btn-light'; ?>" href="?pos=station">站點管理</a>
+            <a class="btn <?php echo $pos == 'form' ? 'btn-primary' : 'btn-light'; ?>" href="?pos=form">接駁意願管理</a>
         </div>
         <?php include "admin$pos.php"; ?><!--這裡的 admin$pos.php 是用來顯示接駁車管理或站點管理的畫面-->
     </div>
