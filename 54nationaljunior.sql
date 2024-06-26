@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-06-05 14:56:57
+-- 產生時間： 2024-06-26 15:31:00
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -38,8 +38,50 @@ CREATE TABLE `bus` (
 --
 
 INSERT INTO `bus` (`id`, `busNumber`, `drivenTime`) VALUES
-(1, '1', 12),
-(2, '2', 5);
+(1, '1', 15),
+(2, '2', 5),
+(4, '3', 10);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `participants`
+--
+
+CREATE TABLE `participants` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `bus_number` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_nopad_ci;
+
+--
+-- 傾印資料表的資料 `participants`
+--
+
+INSERT INTO `participants` (`id`, `name`, `email`, `bus_number`) VALUES
+(1, 'test1', 'test1@example.com', 'AUTO-7631'),
+(2, 'test2', 'test2@example.com', 'AUTO-7631'),
+(3, 'test3', 'test3@example.com', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL,
+  `email_list` text NOT NULL,
+  `form_enabled` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_nopad_ci;
+
+--
+-- 傾印資料表的資料 `settings`
+--
+
+INSERT INTO `settings` (`id`, `email_list`, `form_enabled`) VALUES
+(1, 'test1@example.com,test2@example.com,test3@example.com', 1);
 
 -- --------------------------------------------------------
 
@@ -60,7 +102,8 @@ CREATE TABLE `station` (
 
 INSERT INTO `station` (`id`, `stationName`, `drivenTime`, `stopTime`) VALUES
 (1, '1', 0, 5),
-(2, '2', 2, 3);
+(2, '2', 2, 3),
+(3, '3', 3, 3);
 
 -- --------------------------------------------------------
 
@@ -92,6 +135,19 @@ ALTER TABLE `bus`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 資料表索引 `participants`
+--
+ALTER TABLE `participants`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- 資料表索引 `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 資料表索引 `station`
 --
 ALTER TABLE `station`
@@ -111,13 +167,19 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `bus`
 --
 ALTER TABLE `bus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `participants`
+--
+ALTER TABLE `participants`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `station`
 --
 ALTER TABLE `station`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `users`
