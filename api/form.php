@@ -14,6 +14,29 @@ if ($method == 'POST') {
         $stmt->execute(['form_enabled' => $form_enabled]);
 
         echo json_encode(["message" => "設定已更新"]);
+    } else if (isset($data['new_email'])) {
+        $new_email = $data['new_email'];
+
+        $settings = $pdo->query("SELECT * FROM settings WHERE id = 1")->fetch(PDO::FETCH_ASSOC);
+        if (!$settings) {
+            echo json_encode(["message" => "設定數據未找到"]);
+            exit;
+        }
+
+        $emailList = explode(',', $settings['email_list']);
+        if (in_array($new_email, $emailList)) {
+            echo json_encode(["message" => "此信箱已存在於參與者名單中"]);
+            exit;
+        }
+
+        $emailList[] = $new_email;
+        $emailListString = implode(',', $emailList);
+
+        $sql = "UPDATE settings SET email_list = :email_list WHERE id = 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['email_list' => $emailListString]);
+
+        echo json_encode(["message" => "信箱已新增"]);
     } else {
         if (!isset($data['name']) || !isset($data['email'])) {
             echo json_encode(["message" => "請提供完整的參與者信息"]);

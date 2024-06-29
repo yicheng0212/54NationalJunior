@@ -50,6 +50,10 @@
                                 this.busInfo = data;
                                 this.message = '';
                             }
+                        })
+                        .catch(error => {
+                            this.message = '查詢過程中發生錯誤，請稍後再試。';
+                            this.busInfo = null;
                         });
                 }
             }
