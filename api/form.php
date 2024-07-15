@@ -46,7 +46,7 @@ if ($method == 'POST') {
         $name = $data['name'];
         $email = $data['email'];
 
-        $settings = $pdo->query("SELECT * FROM settings WHERE id = 1")->fetch(PDO::FETCH_ASSOC);
+        $settings = $pdo->query("SELECT * FROM settings WHERE id = 1")->fetch(PDO::FETCH_ASSOC); //這裡的id=1是指settings表中的id
         if (!$settings) {
             echo json_encode(["message" => "設定數據未找到"]);
             exit;
@@ -63,7 +63,7 @@ if ($method == 'POST') {
             exit;
         }
 
-        $sql = "SELECT * FROM participants WHERE email = :email";
+        $sql = "SELECT * FROM participants WHERE email = :email"; //這裡的email是指participants表中的email
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['email' => $email]);
         if ($stmt->rowCount() > 0) {
@@ -88,4 +88,3 @@ if ($method == 'POST') {
 } else {
     echo json_encode(["message" => "Invalid request method"]);
 }
-?>
