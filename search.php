@@ -23,10 +23,9 @@
             <p>{{ message }}</p>
         </div>
 
-        <div v-if="busInfo" class="mt-3">
+        <div v-if="bus_number" class="mt-3">
             <h4>您的接駁車班次資訊</h4>
-            <p>接駁車編號: {{ busInfo.bus_number }}</p>
-            <p>乘客名單: {{ busInfo.passengers.join(', ') }}</p>
+            <p>接駁車編號: {{ bus_number }}</p>
         </div>
     </div>
     <script>
@@ -35,7 +34,7 @@
                 return {
                     email: '',
                     message: '',
-                    busInfo: null
+                    bus_number: ''
                 };
             },
             methods: {
@@ -43,17 +42,17 @@
                     fetch(`./api/result.php?email=${this.email}`)
                         .then(response => response.json())
                         .then(data => {
-                            if (data.message) {
+                            if (data.bus_number) {
+                                this.bus_number = data.bus_number;
                                 this.message = data.message;
-                                this.busInfo = null;
                             } else {
-                                this.busInfo = data;
-                                this.message = '';
+                                this.message = data.message;
+                                this.bus_number = '';
                             }
                         })
                         .catch(error => {
                             this.message = '查詢過程中發生錯誤，請稍後再試。';
-                            this.busInfo = null;
+                            this.bus_number = '';
                         });
                 }
             }

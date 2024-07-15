@@ -21,20 +21,22 @@ if ($method == 'GET' && isset($_GET['email'])) {
     }
 
     // 檢查參與者名單中是否存在該 email
-    $sql = "SELECT * FROM participants WHERE email = :email";
+    $sql = "SELECT email, bus_number FROM participants WHERE email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['email' => $email]);
     $participant = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($participant) {
-        echo json_encode(["message" => "此信箱已存在於參與者名單中"]);
-        exit;
+        // 檢查是否已分配接駁車
+        if ($participant['bus_number']) {
+            echo json_encode(["message" => "您已被分配接駁車", "bus_number" => $participant['bus_number']]);
+        } else {
+            echo json_encode(["message" => "目前尚未分配接駁車"]);
+        }
+    } else {
+        echo json_encode(["message" => "您不在參與名單當中"]);
     }
-
-    echo json_encode(["message" => "您不在參與名單當中"]);
 } else {
-    $sql = "SELECT bus_number, GROUP_CONCAT(name SEPARATOR ', ') as passengers FROM participants WHERE bus_number IS NOT NULL GROUP BY bus_number";
-    $stmt = $pdo->query($sql);
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($results);
+    echo json_encode(["message" => "無效的請求"]);
 }
+?>
