@@ -21,11 +21,11 @@
                         <form @submit.prevent="submitBus">
                             <div class="form-group">
                                 <label for="busNumber">接駁車編號:</label>
-                                <input type="text" class="form-control" id="busNumber" v-model="busNumber" required>
+                                <input type="text" class="form-control" id="busNumber" v-model="busNumber" :readonly="isEditing" required>
                             </div>
                             <div class="form-group">
                                 <label for="drivenTime">行駛時間:</label>
-                                <input type="number" class="form-control" id="drivenTime" v-model="drivenTime" required>
+                                <input type="number" class="form-control" id="drivenTime" v-model="drivenTime" min="0" required>
                             </div>
                             <button type="submit" class="btn btn-primary">提交</button>
                         </form>
@@ -103,13 +103,14 @@
                         $('#busModal').modal('hide');//關閉模態框
                     });
                 },
-                editBus(bus) {//編輯接駁車
-                    this.currentBus = bus;//將bus存入currentBus
-                    this.busNumber = bus.busNumber;
-                    this.drivenTime = bus.drivenTime;
-                    this.modalTitle = '編輯接駁車';//設定模態框標題
-                    $('#busModal').modal('show');//打開模態框
-                },
+                editBus(bus) { // 編輯接駁車
+                this.currentBus = bus; // 將bus存入currentBus
+                this.busNumber = bus.busNumber;
+                this.drivenTime = bus.drivenTime;
+                this.modalTitle = '編輯接駁車'; // 設定模態框標題
+                this.isEditing = true; // 設定編輯模式標誌
+                $('#busModal').modal('show'); // 打開模態框
+             },
                 updateBus() {//更新接駁車
                     fetch('./api/bus.php', {
                         method: 'PUT',//使用PUT方法

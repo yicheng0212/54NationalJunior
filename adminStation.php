@@ -21,15 +21,15 @@
                     <form @submit.prevent="submitStation">
                         <div class="form-group">
                             <label for="stationName">站點名稱:</label>
-                            <input type="text" class="form-control" id="stationName" v-model="stationName" required>
+                            <input type="text" class="form-control" id="stationName" v-model="stationName" :readonly="isEditing" required>
                         </div>
                         <div class="form-group">
                             <label for="drivenTime">行駛時間 (分鐘):</label>
-                            <input type="number" class="form-control" id="drivenTime" v-model="drivenTime" required>
+                            <input type="number" class="form-control" id="drivenTime" v-model="drivenTime" min="0" required>
                         </div>
                         <div class="form-group">
                             <label for="stopTime">停留時間 (分鐘):</label>
-                            <input type="number" class="form-control" id="stopTime" v-model="stopTime" required>
+                            <input type="number" class="form-control" id="stopTime" v-model="stopTime" min="0" required>
                         </div>
                         <button type="submit" class="btn btn-primary">提交</button>
                     </form>
@@ -117,6 +117,7 @@
                 this.drivenTime = station.drivenTime;
                 this.stopTime = station.stopTime;
                 this.modalTitle = '編輯站點'; // 設定模態框標題
+                this.isEditing = true; // 設定編輯模式標誌
                 $('#stationModal').modal('show'); // 打開模態框
             },
             updateStation() { // 更新站點
