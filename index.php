@@ -138,22 +138,19 @@
             <input type="range" min="1" max="5" id="busRange" v-model="data.row" class="custom-range" @click="getData">
         </div>
 
-        <div class="map shadow rounded mt-5" style="width: 65vw; height: 50vh; overflow: auto;" :style="{ '--w': ` calc((65vw - 20em) / ${data.row})` }"><!-- 這裡的 65vw 是地圖的寬度，50vh 是地圖的高度 -->
+        <div class="map shadow rounded mt-5" style="width: 65vw; height: 50vh; overflow: auto;" :style="{ '--w': ` calc((65vw - 20em) / ${data.row})` }">
             <div class="row" v-for="(row, i) in data.data" :class="i % 2 ? 'left-row' : 'right-row'" style="width: 65wv - 20em; display: flex;">
                 <div class="border-left"></div>
                 <div class="station" v-for="(item, idx) in row">
-
                     <div class="mapIcon"></div>
-                    <div class="data text-center">
+                    <div class="data text-center" v-if="item.bus.length > 0">
                         <p style="transform: translateY(-4em);" :class="item.bus[0].textColor" v-html="item.bus[0].htmlContent"></p>
                         <button class="btn btn-sm btn-outline-dark" style="transform: translateY(-2em);">{{
-                                    item.stationName }}</button>
+                            item.stationName }}</button>
                         <div class="card shadow busData p-1">
-                            <p v-for="bus in item.bus" class="m-0" :class="bus.textColor" v-html="bus.htmlContentForCard">
-                            </p>
+                            <p v-for="bus in item.bus" class="m-0" :class="bus.textColor" v-html="bus.htmlContentForCard"></p>
                         </div>
                     </div>
-
                 </div>
                 <div class="border-right"></div>
             </div>
@@ -169,62 +166,64 @@
         createApp({
             setup() {
 
-                const data = reactive({ // 這裡的 data 是用來存放地圖上的站點資訊
+                const data = reactive({
                     row: 3,
                     data: []
                 })
 
-                let station, busData = undefined // 這裡的 station 是用來存放站點資訊，busData 是用來存放接駁車資訊
+                let station, bus = undefined
 
-                const procData = () => { // 這裡的 procData 是用來處理資料的函式
-                    if (!station || typeof bus === "undefined") return; // 如果 station 或 busData 還沒有資料，就不處理資料
+                const procData = () => {
+                    if (!station || typeof bus === "undefined") return;
 
-                    let allTime = 0; // 這裡的 allTime 是用來計算總時間的變數
-                    console.log("Starting procData"); // 這裡的 console.log 用來顯示訊息
+                    let allTime = 0;
+                    console.log("Starting procData");
 
-                    station.forEach((stationInfo, idx) => { // 這裡的 forEach 用來遍歷 station 陣列
-                        allTime += stationInfo.drivenTime + stationInfo.stopTime; // 使用 drivenTime 和 stopTime
-                        stationInfo.bus = []; // 這裡的 bus 是用來存放接駁車資訊
+                    station.forEach((stationInfo, idx) => {
+                        allTime += stationInfo.drivenTime + stationInfo.stopTime;
+                        stationInfo.bus = [];
 
-                        bus.forEach((busInfo) => { // 這裡的 forEach 用來遍歷 bus 陣列
-                            let busCopy = { // 這裡的 busCopy 是用來複製 busInfo 物件
+                        let passedBuses = [];
+
+                        bus.forEach((busInfo) => {
+                            let busCopy = {
                                 ...busInfo
                             };
-                            if (busCopy.drivenTime <= allTime) { // 使用 drivenTime
-                                if (busCopy.drivenTime >= allTime - stationInfo.stopTime) { // 使用 stopTime
+                            if (busCopy.drivenTime <= allTime) {
+                                if (busCopy.drivenTime >= allTime - stationInfo.stopTime) {
                                     busCopy.textColor = "text-danger";
                                     busCopy.htmlContent = busCopy.busNumber + "<br>已到站";
                                     busCopy.htmlContentForCard = busCopy.busNumber + "已到站";
+                                    stationInfo.bus.push(busCopy);
                                 } else {
                                     busCopy.textColor = "text-dark";
-                                    busCopy.relArri = allTime - stationInfo.stopTime - busCopy.drivenTime; // 使用 drivenTime 和 stopTime
+                                    busCopy.relArri = allTime - stationInfo.stopTime - busCopy.drivenTime;
                                     busCopy.htmlContent = busCopy.busNumber + "<br>約" + busCopy.relArri + "分鐘";
                                     busCopy.htmlContentForCard = busCopy.busNumber + "約" + busCopy.relArri + "分鐘";
+                                    stationInfo.bus.push(busCopy);
                                 }
                             } else {
                                 busCopy.textColor = "text-secondary";
-                                busCopy.relArri = allTime - stationInfo.stopTime - busCopy.drivenTime; // 使用 drivenTime 和 stopTime
-                                busCopy.htmlContent = idx == 0 ? "未發車" : busCopy.busNumber + "已過站";
-                                busCopy.htmlContentForCard = idx == 0 ? "未發車" : busCopy.busNumber + "已過站";
+                                busCopy.htmlContent = busCopy.busNumber + "<br>已過站";
+                                busCopy.htmlContentForCard = busCopy.busNumber + "已過站";
+                                passedBuses.push(busCopy);
                             }
-                            stationInfo.bus.push(busCopy); // 這裡的 push 用來將 busCopy 加入 stationInfo.bus
                         });
-
-                        stationInfo.bus.sort((a, b) => a.relArri - b.relArri); // 這裡的 sort 用來排序 stationInfo.bus
-                        stationInfo.bus.splice(3); // 這裡的 splice 用來刪除 stationInfo.bus 的元素
+                        stationInfo.bus = stationInfo.bus.concat(passedBuses);
+                        stationInfo.bus.splice(3);
                     });
 
-                    data.data = []; // 這裡的 data.data 是用來存放地圖上的站點資訊
-                    let rowCount = Math.ceil(station.length / data.row); // 這裡的 rowCount 是用來計算列數
-                    for (let i = 0; i < rowCount; i++) { // 這裡的 for 迴圈用來遍歷 rowCount
+                    data.data = [];
+                    let rowCount = Math.ceil(station.length / data.row);
+                    for (let i = 0; i < rowCount; i++) {
                         data.data.push(station.slice(i * data.row, (i + 1) * data.row));
                     }
 
-                    console.log("Processed Data:", data.data); // 這裡的 console.log 用來顯示訊息
+                    console.log("Processed Data:", data.data);
                 };
 
 
-                const getData = async () => { // 這裡的 getData 是用來取得資料的函式
+                const getData = async () => {
                     await $.getJSON("./api/station.php", {}, (r) => {
                         console.log("Station Data:", r);
                         station = structuredClone(r);
@@ -238,14 +237,14 @@
                 };
 
 
-                onMounted(() => { // 這裡的 onMounted 用來執行函式
+                onMounted(() => {
                     getData()
                     setInterval(() => {
                         procData()
-                    }, 1)
+                    }, 1000)
                 })
 
-                return { // 這裡的 return 用來回傳資料
+                return {
                     data,
                     getData,
                     procData
