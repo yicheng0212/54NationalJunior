@@ -9,7 +9,7 @@ if ($method == 'GET' && isset($_GET['type']) && $_GET['type'] == 'count') {
     $stmt = $pdo->query($sql);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $count = isset($result['count']) ? $result['count'] : 0;
-    $bus_count = ceil($count / 50) + 1;
+    $bus_count = ceil($count / 5) + 1;
     echo json_encode(["count" => $bus_count]);
 } else if ($method == 'GET') {
     $sql = "SELECT id, email FROM participants";
