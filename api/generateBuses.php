@@ -9,7 +9,7 @@ if ($method == 'PUT') {
     $stmt = $pdo->query($sql);
     $participants = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $numParticipants = count($participants);
-    $numBuses = ceil($numParticipants / 50);
+    $numBuses = ceil($numParticipants / 5);
     $busNumbers = [];
 
     for ($i = 0; $i < $numBuses; $i++) {

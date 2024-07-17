@@ -74,7 +74,7 @@
                 fetch('./api/participants.php?type=count')
                     .then(response => response.json())
                     .then(data => {
-                        this.busCount = Math.ceil(data.count / 50);
+                        this.busCount = data.count;
                     });
             },
             addEmail() {
