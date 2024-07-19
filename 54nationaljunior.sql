@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-06-26 15:31:00
+-- 產生時間： 2024 年 07 月 18 日 17:41
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -38,9 +38,9 @@ CREATE TABLE `bus` (
 --
 
 INSERT INTO `bus` (`id`, `busNumber`, `drivenTime`) VALUES
-(1, '1', 15),
-(2, '2', 5),
-(4, '3', 10);
+(5, 'A12345', 31),
+(6, 'B12345', 24),
+(7, 'C12345', 6);
 
 -- --------------------------------------------------------
 
@@ -62,7 +62,13 @@ CREATE TABLE `participants` (
 INSERT INTO `participants` (`id`, `name`, `email`, `bus_number`) VALUES
 (1, 'test1', 'test1@example.com', 'AUTO-7631'),
 (2, 'test2', 'test2@example.com', 'AUTO-7631'),
-(3, 'test3', 'test3@example.com', NULL);
+(3, 'test3', 'test3@example.com', NULL),
+(4, '1', '1@echolyc.com', NULL),
+(5, '2', '2@echolyc.com', NULL),
+(6, '3', '3@echolyc.com', NULL),
+(7, '4', '4@echolyc.com', NULL),
+(8, '5', '5@echolyc.com', NULL),
+(9, '6', '6@echolyc.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -81,7 +87,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `email_list`, `form_enabled`) VALUES
-(1, 'test1@example.com,test2@example.com,test3@example.com', 1);
+(1, 'test1@example.com,test2@example.com,test3@example.com,1@echolyc.com,2@echolyc.com,3@echolyc.com,4@echolyc.com,5@echolyc.com,6@echolyc.com', 1);
 
 -- --------------------------------------------------------
 
@@ -101,9 +107,14 @@ CREATE TABLE `station` (
 --
 
 INSERT INTO `station` (`id`, `stationName`, `drivenTime`, `stopTime`) VALUES
-(1, '1', 0, 5),
-(2, '2', 2, 3),
-(3, '3', 3, 3);
+(4, '台北車站', 0, 5),
+(5, '台大醫院', 2, 3),
+(6, '中正紀念堂', 2, 3),
+(7, '東門', 3, 5),
+(8, '大安森林公園', 2, 3),
+(9, '大安', 1, 5),
+(10, '信義安和', 3, 3),
+(11, '台北101', 2, 5);
 
 -- --------------------------------------------------------
 
@@ -167,19 +178,19 @@ ALTER TABLE `users`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `bus`
 --
 ALTER TABLE `bus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `participants`
 --
 ALTER TABLE `participants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `station`
 --
 ALTER TABLE `station`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `users`
