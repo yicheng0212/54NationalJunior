@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡易留言板</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <script src="./js/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div id="message-board" class="container mt-5">
+            <h1 class="text-center">簡易留言板</h1>
+
+
+            <div class="form-group" id="message">
+                <input v-model="newMessage.title" type="text" class="form-control" id="title-input" placeholder="留言標題">
+                <div class="form-group">
+                    <textarea v-model="newMessage.body" class="form-control" id="message-input" rows="4"
+                        placeholder="留言內容"></textarea>
+                </div>
+                <button @click="addMessage" class="btn btn-primary" id="submit-button">送出</button>
+            </div>
+
+
+
+            <div class="mt-4" class="messages">
+                <div class="card mb-3 message" v-for="(message, index) in messages" :key="index">
+                    <div class="card-body">
+                        <h5 class="card-title message-title">{{ message.title }}</h5>
+                        <p class="card-text message-body">{{ message.body }}</p>
+                        <button @click="deleteMessage(index)" class="btn btn-danger delete-button">刪除</button>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    newMessage: {
+                        title: '',
+                        body: ''
+                    },
+                    messages: []
+                };
+            },
+            methods: {
+                addMessage() {
+                    if (this.newMessage.title && this.newMessage.body) {
+                        this.messages.push({ ...this.newMessage });
+                        this.newMessage.title = '';
+                        this.newMessage.body = '';
+                    } else {
+                        alert('請輸入標題和內容');
+                    }
+                },
+                deleteMessage(index) {
+                    this.messages.splice(index, 1);
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
